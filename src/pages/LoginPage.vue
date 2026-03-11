@@ -1,45 +1,47 @@
 <!-- src/pages/LoginPage.vue -->
 <template>
-    <div class="login-page full-height flex flex-center bg-grey-1">
-      <q-card class="q-pa-lg" style="width: 100%; max-width: 400px">
-        <q-card-section class="text-center">
-          <div class="text-h5 q-mb-md">Вход в систему</div>
-        </q-card-section>
-  
-        <q-card-section>
-          <q-form @submit="onSubmit" class="q-gutter-md">
-            <q-input
-              v-model="form.email"
-              label="Email"
-              type="email"
-              :rules="[val => !!val || 'Email обязателен', val => /.+@.+\..+/.test(val) || 'Некорректный email']"
-            />
-  
-            <q-input
-              v-model="form.password"
-              label="Пароль"
-              type="password"
-              :rules="[val => !!val || 'Пароль обязателен']"
-            />
-  
-            <q-btn
-              :loading="loginMutation.isPending.value"
-              label="Войти"
-              type="submit"
-              color="primary"
-              class="full-width"
-            />
-  
-            <q-banner
-              v-if="loginMutation.error.value"
-              class="bg-red-1 text-red-9 full-width rounded-borders"
-            >
-              {{ loginMutation.error.value.message }}
-            </q-banner>
-          </q-form>
-        </q-card-section>
-      </q-card>
-    </div>
+    <q-page class="q-pa-md">
+        <div class="login-page full-height flex flex-center bg-grey-1">
+            <q-card class="q-pa-lg" style="width: 100%; max-width: 400px">
+                <q-card-section class="text-center">
+                    <div class="text-h5 q-mb-md">Вход в систему</div>
+                </q-card-section>
+        
+                <q-card-section>
+                    <q-form @submit="onSubmit" class="q-gutter-md">
+                        <q-input
+                        v-model="form.email"
+                        label="Email"
+                        type="email"
+                        :rules="[val => !!val || 'Email обязателен', val => /.+@.+\..+/.test(val) || 'Некорректный email']"
+                        />
+            
+                        <q-input
+                        v-model="form.password"
+                        label="Пароль"
+                        type="password"
+                        :rules="[val => !!val || 'Пароль обязателен']"
+                        />
+            
+                        <q-btn
+                        :loading="loginMutation.isPending.value"
+                        label="Войти"
+                        type="submit"
+                        color="primary"
+                        class="full-width"
+                        />
+            
+                        <q-banner
+                        v-if="loginMutation.error.value"
+                        class="bg-red-1 text-red-9 full-width rounded-borders"
+                        >
+                        {{ loginMutation.error.value.message }}
+                        </q-banner>
+                    </q-form>
+                </q-card-section>
+            </q-card>
+        </div>
+    </q-page>
   </template>
   
   <script setup lang="ts">

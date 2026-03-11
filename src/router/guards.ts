@@ -5,8 +5,6 @@ import { useAuthStore } from 'src/stores/auth';
 export function setupAuthGuard(router: Router) {
   router.beforeEach((to, from, next) => {
 
-    console.log('guard');
-
     const authStore = useAuthStore();
     
     // Проверяем сохранённый токен при первой загрузке
@@ -15,7 +13,7 @@ export function setupAuthGuard(router: Router) {
     }
 
     // Публичные маршруты
-    const publicRoutes = ['/login', '/register', '/forgot-password'];
+    const publicRoutes = ['/auth/login', '/auth', '/register', '/forgot-password'];
     if (publicRoutes.includes(to.path)) {
       if (authStore.isAuthenticated) {
         return next('/'); // Уже авторизован — редирект на главную
@@ -29,6 +27,6 @@ export function setupAuthGuard(router: Router) {
     }
 
     // Не авторизован — на логин с возвратом
-    next({ path: '/login', query: { redirect: to.fullPath } });
+    next({ path: '/auth/login', query: { redirect: to.fullPath } });
   });
 }

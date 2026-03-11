@@ -20,6 +20,27 @@ const routes: RouteRecordRaw[] = [
             name: 'categories',
             component: () => import('../pages/CategoriesPage.vue')
         },
+        {
+            path: 'categories/new',
+            name: 'category-new',
+            component: () => import('../pages/CategoryFormPage.vue')
+        },
+        {
+            path: 'categories/:id/edit',
+            name: 'category-edit',
+            component: () => import('../pages/CategoryFormPage.vue')
+        },
+    ]
+  },
+  {
+    path: '/auth',
+    component: () => import('layouts/AuthLayout.vue'),
+    children: [
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('../pages/LoginPage.vue')
+      }
     ]
   },
   {
