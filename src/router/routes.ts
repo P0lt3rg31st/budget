@@ -30,6 +30,16 @@ const routes: RouteRecordRaw[] = [
             name: 'category-edit',
             component: () => import('../pages/CategoryFormPage.vue')
         },
+        {
+            path: 'accounts/new',
+            name: 'account-new',
+            component: () => import('../pages/AccountFormPage.vue')
+        },
+        {
+            path: 'accounts/:id/edit',
+            name: 'account-edit',
+            component: () => import('../pages/AccountFormPage.vue')
+        },
     ]
   },
   {
