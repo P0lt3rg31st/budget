@@ -49,7 +49,7 @@ export const useAuthStore = defineStore('auth', () => {
     tokenExpiry.value = null;
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_expiry');
-    router.push('/login');
+    router.push('/auth/login');
   };
 
   return {

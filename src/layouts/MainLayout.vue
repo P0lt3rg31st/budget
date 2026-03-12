@@ -56,6 +56,15 @@
           </q-item-section>
         </q-item>
 
+        <q-item clickable v-ripple @click="logout">
+          <q-item-section avatar>
+            <q-icon name="logout" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Выйти</q-item-label>
+          </q-item-section>
+        </q-item>
+
       </q-list>
     </q-drawer>
 
@@ -67,20 +76,27 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { useAuthStore } from 'src/stores/auth'
 
 export default defineComponent({
   name: 'MainLayout',
 
   setup() {
     const leftDrawerOpen = ref(false)
+    const authStore = useAuthStore()
 
     const toggleLeftDrawer = (): void => {
       leftDrawerOpen.value = !leftDrawerOpen.value
     }
 
+    const logout = (): void => {
+      authStore.logout()
+    }
+
     return {
       leftDrawerOpen,
-      toggleLeftDrawer
+      toggleLeftDrawer,
+      logout
     }
   }
 })
