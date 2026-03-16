@@ -28,4 +28,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             String name,
             Long categoryId
     );
+
 }
