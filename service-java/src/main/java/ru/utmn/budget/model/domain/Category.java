@@ -45,10 +45,4 @@ public class Category {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Instant updatedAt;
-
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<Transaction> transactions = new ArrayList<>();
-
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<BudgetPlanCategoryLimit> budgetPlanCategoryLimits = new ArrayList<>();
 }
