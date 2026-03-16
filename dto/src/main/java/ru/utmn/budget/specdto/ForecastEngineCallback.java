@@ -2,6 +2,7 @@ package ru.utmn.budget.specdto;
 
 import java.util.List;
 import java.util.Map;
+import ru.utmn.budget.forecast.ForecastRunStatus;
 
 public record ForecastEngineCallback(
         Long runId,

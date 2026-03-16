@@ -1,6 +1,7 @@
 package ru.utmn.budget.specdto;
 
 import java.util.Map;
+import ru.utmn.budget.util.ScenarioType;
 
 public record ScenarioCreateRequest(
         String name,

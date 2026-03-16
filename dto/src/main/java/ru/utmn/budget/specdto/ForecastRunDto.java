@@ -2,6 +2,8 @@ package ru.utmn.budget.specdto;
 
 import java.time.OffsetDateTime;
 import java.util.Map;
+import ru.utmn.budget.forecast.ForecastModelType;
+import ru.utmn.budget.forecast.ForecastRunStatus;
 
 public record ForecastRunDto(
         Long id,

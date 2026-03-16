@@ -1,11 +1,12 @@
 package ru.utmn.budget.specdto;
 
 import java.time.OffsetDateTime;
+import ru.utmn.budget.util.CashflowType;
 
 public record CategoryDto(
         Long id,
         String name,
-        FlowType type,
+        CashflowType type,
         Boolean archived,
         OffsetDateTime createdAt
 ) {
