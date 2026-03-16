@@ -1,4 +1,4 @@
-package ru.utmn.budget.enam.handler;
+package ru.utmn.budget.handler;
 
 
 import jakarta.servlet.http.HttpServletResponse;

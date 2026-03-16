@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import ru.utmn.budget.enam.util.ImportJobFormat;
-import ru.utmn.budget.enam.util.ImportJobStatus;
+import ru.utmn.budget.util.ImportJobFormat;
+import ru.utmn.budget.util.ImportJobStatus;
 import ru.utmn.budget.model.domain.User;
 
 import java.time.Instant;

@@ -1,4 +1,4 @@
-package ru.utmn.budget.enam.util;
+package ru.utmn.budget.util;
 
 public enum ImportJobStatus {
     QUEUED,

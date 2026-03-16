@@ -1,4 +1,4 @@
-package ru.utmn.budget.enam.forecast;
+package ru.utmn.budget.forecast;
 
 public enum ForecastRunStatus {
     QUEUED,

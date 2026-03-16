@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import ru.utmn.budget.enam.util.CashflowType;
+import ru.utmn.budget.util.CashflowType;
 
 import java.math.BigDecimal;
 import java.time.Instant;

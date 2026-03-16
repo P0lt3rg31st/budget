@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import ru.utmn.budget.enam.alert.AlertSeverity;
-import ru.utmn.budget.enam.alert.AlertStatus;
-import ru.utmn.budget.enam.alert.AlertType;
+import ru.utmn.budget.alert.AlertSeverity;
+import ru.utmn.budget.alert.AlertStatus;
+import ru.utmn.budget.alert.AlertType;
 
 import java.time.Instant;
 import java.time.LocalDate;

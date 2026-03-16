@@ -1,4 +1,4 @@
-package ru.utmn.budget.enam.alert;
+package ru.utmn.budget.alert;
 
 public enum AlertSeverity {
     INFO,

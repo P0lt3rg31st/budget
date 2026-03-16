@@ -18,8 +18,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
-import ru.utmn.budget.enam.forecast.ForecastModelType;
-import ru.utmn.budget.enam.forecast.ForecastRunStatus;
+import ru.utmn.budget.forecast.ForecastModelType;
+import ru.utmn.budget.forecast.ForecastRunStatus;
 
 import java.time.Instant;
 import java.util.List;

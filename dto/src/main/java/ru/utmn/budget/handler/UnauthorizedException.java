@@ -1,4 +1,4 @@
-package ru.utmn.budget.enam.handler;
+package ru.utmn.budget.handler;
 
 public class UnauthorizedException extends RuntimeException {
     public UnauthorizedException(String message) {
