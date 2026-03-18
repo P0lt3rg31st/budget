@@ -17,44 +17,36 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users/{userId}/categories")
+@RequestMapping("/api/v1/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
     @GetMapping
     public List<CategoryDto> getCategories(
-            @PathVariable Long userId,
-            @RequestParam(required = false) CashflowType type,
-            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-            @RequestParam(defaultValue = "20") @Positive int size
+            @RequestParam(name = "type", required = false) CashflowType type,
+            @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
+            @RequestParam(name = "size", defaultValue = "20") @Positive int size
     ) {
-        return categoryService.getCategories(userId, type, from, size);
+        return categoryService.getCategories(type, from, size);
     }
 
     @GetMapping("/{categoryId}")
-    public CategoryDto getCategoryById(
-            @PathVariable Long userId,
-            @PathVariable Long categoryId
-    ) {
-        return categoryService.getCategoryById(userId, categoryId);
+    public CategoryDto getCategoryById(@PathVariable Long categoryId) {
+        return categoryService.getCategoryById(categoryId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto createCategory(
-            @PathVariable Long userId,
-            @RequestBody @Valid CategoryCreateRequest request
-    ) {
-        return categoryService.createCategory(userId, request);
+    public CategoryDto createCategory(@RequestBody @Valid CategoryCreateRequest request) {
+        return categoryService.createCategory(request);
     }
 
     @PatchMapping("/{categoryId}")
     public CategoryDto updateCategory(
-            @PathVariable Long userId,
             @PathVariable Long categoryId,
             @RequestBody @Valid CategoryUpdateRequest request
     ) {
-        return categoryService.updateCategory(userId, categoryId, request);
+        return categoryService.updateCategory(categoryId, request);
     }
 }

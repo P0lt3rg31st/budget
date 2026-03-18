@@ -3,6 +3,7 @@ package ru.utmn.budget.category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.utmn.budget.OffsetPageRequest;
 import ru.utmn.budget.handler.ConflictException;
 import ru.utmn.budget.handler.NotFoundException;
@@ -13,7 +14,6 @@ import ru.utmn.budget.specdto.categories.CategoryDto;
 import ru.utmn.budget.specdto.categories.CategoryUpdateRequest;
 import ru.utmn.budget.user.UserRepository;
 import ru.utmn.budget.util.CashflowType;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,7 +31,8 @@ public class CategoryService {
     private final UserRepository userRepository;
     private final CategoryMapper categoryMapper;
 
-    public List<CategoryDto> getCategories(Long userId, CashflowType type, int from, int size) {
+    public List<CategoryDto> getCategories(CashflowType type, int from, int size) {
+        Long userId = getCurrentUserId();
         OffsetPageRequest pageable = buildPageable(from, size);
 
         List<Category> categories = (type == null)
@@ -43,14 +44,17 @@ public class CategoryService {
                 .toList();
     }
 
-    public CategoryDto getCategoryById(Long userId, Long categoryId) {
+    public CategoryDto getCategoryById(Long categoryId) {
+        Long userId = getCurrentUserId();
         Category category = getOwnedCategory(userId, categoryId);
         return categoryMapper.toDto(category);
     }
 
     @Transactional
-    public CategoryDto createCategory(Long userId, CategoryCreateRequest request) {
+    public CategoryDto createCategory(CategoryCreateRequest request) {
+        Long userId = getCurrentUserId();
         String normalizedName = normalizeName(request.name());
+
         assertCategoryNameUniqueForCreate(userId, request.type(), normalizedName);
 
         User user = getUserOrThrow(userId);
@@ -66,7 +70,8 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryDto updateCategory(Long userId, Long categoryId, CategoryUpdateRequest request) {
+    public CategoryDto updateCategory(Long categoryId, CategoryUpdateRequest request) {
+        Long userId = getCurrentUserId();
         Category category = getOwnedCategory(userId, categoryId);
 
         updateNameIfPresent(category, request);
@@ -165,5 +170,11 @@ public class CategoryService {
 
     private String normalizeName(String rawName) {
         return rawName == null ? null : rawName.trim().replaceAll("\\s+", " ");
+    }
+
+    //TODO: УБРАТЬ!!!!!!!!!!!!!
+    //ЗАГЛУШКА!!!!!!!!!!!
+    private Long getCurrentUserId() {
+        return 1L;
     }
 }

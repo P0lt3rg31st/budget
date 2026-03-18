@@ -7,6 +7,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.ErrorResponseException;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.net.BindException;
 import java.time.OffsetDateTime;
@@ -43,7 +45,7 @@ public class GlobalExceptionHandler {
             HttpMessageNotReadableException.class,
             BindException.class
     })
-    public org.springframework.http.ResponseEntity<ApiError> handleBadRequest(
+    public ResponseEntity<ApiError> handleBadRequest(
             Exception ex,
             HttpServletRequest request,
             HttpServletResponse response
@@ -52,7 +54,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public org.springframework.http.ResponseEntity<ApiError> handleMethodArgumentNotValid(
+    public ResponseEntity<ApiError> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
             HttpServletRequest request,
             HttpServletResponse response
@@ -73,7 +75,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HandlerMethodValidationException.class)
-    public org.springframework.http.ResponseEntity<ApiError> handleHandlerMethodValidation(
+    public ResponseEntity<ApiError> handleHandlerMethodValidation(
             HandlerMethodValidationException ex,
             HttpServletRequest request,
             HttpServletResponse response
@@ -93,7 +95,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public org.springframework.http.ResponseEntity<ApiError> handleConstraintViolation(
+    public ResponseEntity<ApiError> handleConstraintViolation(
             ConstraintViolationException ex,
             HttpServletRequest request,
             HttpServletResponse response
@@ -113,7 +115,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public org.springframework.http.ResponseEntity<ApiError> handleUnauthorized(
+    public ResponseEntity<ApiError> handleUnauthorized(
             UnauthorizedException ex,
             HttpServletRequest request,
             HttpServletResponse response
@@ -125,7 +127,7 @@ public class GlobalExceptionHandler {
             NotFoundException.class,
             NoSuchElementException.class
     })
-    public org.springframework.http.ResponseEntity<ApiError> handleNotFound(
+    public ResponseEntity<ApiError> handleNotFound(
             Exception ex,
             HttpServletRequest request,
             HttpServletResponse response
@@ -133,11 +135,20 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.NOT_FOUND, resolveMessage(ex), request, response);
     }
 
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ApiError> handleNoResourceFound(
+            NoResourceFoundException ex,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        return buildResponse(HttpStatus.NOT_FOUND, "Resource not found", request, response);
+    }
+
     @ExceptionHandler({
             ConflictException.class,
             DataIntegrityViolationException.class
     })
-    public org.springframework.http.ResponseEntity<ApiError> handleConflict(
+    public ResponseEntity<ApiError> handleConflict(
             Exception ex,
             HttpServletRequest request,
             HttpServletResponse response
@@ -150,7 +161,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ErrorResponseException.class)
-    public org.springframework.http.ResponseEntity<ApiError> handleSpringErrorResponse(
+    public ResponseEntity<ApiError> handleSpringErrorResponse(
             ErrorResponseException ex,
             HttpServletRequest request,
             HttpServletResponse response
@@ -165,7 +176,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public org.springframework.http.ResponseEntity<ApiError> handleUnexpected(
+    public ResponseEntity<ApiError> handleUnexpected(
             Exception ex,
             HttpServletRequest request,
             HttpServletResponse response
@@ -178,7 +189,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    private org.springframework.http.ResponseEntity<ApiError> buildResponse(
+    private ResponseEntity<ApiError> buildResponse(
             HttpStatus status,
             String message,
             HttpServletRequest request,
@@ -198,7 +209,7 @@ public class GlobalExceptionHandler {
                 traceId
         );
 
-        return org.springframework.http.ResponseEntity
+        return ResponseEntity
                 .status(status)
                 .header(REQUEST_ID_HEADER, requestId)
                 .body(body);
