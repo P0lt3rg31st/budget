@@ -36,14 +36,15 @@ public class UserController {
 
     @GetMapping("/me")
     public UserDto getMe(@AuthenticationPrincipal Jwt jwt) {
-        Long userId = jwt.getClaim("user_id");
+        Long userId = extractUserId(jwt);
         User user = userService.getById(userId);
         return userMapper.toDto(user);
     }
 
     @PatchMapping("/me")
-    public UserDto updateMe(@AuthenticationPrincipal(expression = "id") Long currentUserId,
+    public UserDto updateMe(@AuthenticationPrincipal Jwt jwt,
                             @Valid @RequestBody UserUpdateRequest request) {
+        Long currentUserId = extractUserId(jwt);
         User updatedUser = userService.update(
                 currentUserId,
                 request.email(),
@@ -54,16 +55,18 @@ public class UserController {
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<Void> deleteMe(@AuthenticationPrincipal(expression = "id") Long currentUserId) {
+    public ResponseEntity<Void> deleteMe(@AuthenticationPrincipal Jwt jwt) {
+        Long currentUserId = extractUserId(jwt);
         userService.delete(currentUserId);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/me/password")
     public ResponseEntity<Void> changeMyPassword(
-            @AuthenticationPrincipal(expression = "id") Long currentUserId,
+            @AuthenticationPrincipal Jwt jwt,
             @Valid @RequestBody ChangePasswordRequest request
     ) {
+        Long currentUserId = extractUserId(jwt);
         userService.changePassword(
                 currentUserId,
                 request.currentPassword(),
@@ -71,5 +74,9 @@ public class UserController {
         );
 
         return ResponseEntity.noContent().build();
+    }
+
+    private Long extractUserId(Jwt jwt) {
+        return ((Number) jwt.getClaim("user_id")).longValue();
     }
 }
