@@ -93,6 +93,14 @@
         "operationId": "login",
         "summary": "Login and receive JWT token",
         "security": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idempotencyKeyHeader"
+          },
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -125,7 +133,17 @@
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           }
-        },
+        }
+      }
+    },
+    "/api/v1/users": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "createUser",
+        "summary": "Create user profile",
+        "security": [],
         "parameters": [
           {
             "$ref": "#/components/parameters/idempotencyKeyHeader"
@@ -133,7 +151,43 @@
           {
             "$ref": "#/components/parameters/requestIdHeader"
           }
-        ]
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              },
+              "Idempotency-Key": {
+                "$ref": "#/components/headers/idempotencyKey"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
       }
     },
     "/api/v1/users/me": {
@@ -143,6 +197,11 @@
         ],
         "operationId": "getMe",
         "summary": "Get current user profile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -162,12 +221,123 @@
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           }
-        },
+        }
+      },
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "updateMe",
+        "summary": "Update current user profile",
         "parameters": [
           {
             "$ref": "#/components/parameters/requestIdHeader"
           }
-        ]
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "deleteMe",
+        "summary": "Delete current user profile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/password": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "changeMyPassword",
+        "summary": "Change current user password",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Password changed",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
       }
     },
     "/api/v1/accounts": {
@@ -1900,11 +2070,80 @@
           },
           "displayName": {
             "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
             "example": "Timofei"
           },
           "createdAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "UserCreateRequest": {
+        "type": "object",
+        "required": [
+          "email",
+          "displayName",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 254
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8,
+            "maxLength": 255
+          }
+        }
+      },
+      "UserUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 254
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        }
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "required": [
+          "currentPassword",
+          "newPassword"
+        ],
+        "properties": {
+          "currentPassword": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8,
+            "maxLength": 255
+          },
+          "newPassword": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8,
+            "maxLength": 255
           }
         }
       },
@@ -1944,7 +2183,6 @@
           "expiresIn": {
             "type": "integer",
             "format": "int64",
-            "description": "Seconds until expiration",
             "example": 3600
           }
         }
