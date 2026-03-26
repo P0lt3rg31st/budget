@@ -11,6 +11,10 @@ import ru.utmn.budget.specdto.users.UserCreateRequest;
 import ru.utmn.budget.specdto.users.UserDto;
 import ru.utmn.budget.specdto.users.UserUpdateRequest;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+
 @Mapper(
         componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.ERROR
@@ -45,4 +49,8 @@ public interface UserMapper {
     @Mapping(target = "scenarios", ignore = true)
     @Mapping(target = "importJobs", ignore = true)
     void update(UserUpdateRequest request, @MappingTarget User user);
+
+    default OffsetDateTime map(Instant value) {
+        return value == null ? null : value.atOffset(ZoneOffset.UTC);
+    }
 }

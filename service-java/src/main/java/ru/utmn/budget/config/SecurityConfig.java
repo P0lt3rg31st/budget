@@ -32,11 +32,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public JwtEncoder jwtEncoder(AuthProperties authProperties) {
         byte[] secretBytes = authProperties.secret().getBytes(StandardCharsets.UTF_8);
         SecretKeySpec secretKey = new SecretKeySpec(secretBytes, "HmacSHA256");
