@@ -24,29 +24,20 @@ public class UserService {
         return findUserById(userId);
     }
 
-    public User getByEmailIgnoreCase(String email) {
-
-        return userRepository.findByEmailIgnoreCase(email)
-                .orElseThrow(() -> new NotFoundException("User not found: email=" + email));
-    }
-
-    public boolean existsByEmailIgnoreCase(String email) {
-        return userRepository.existsByEmailIgnoreCase(email);
-    }
-
     @Transactional
     public User create(String email, String displayName, String rawPassword) {
-        validateEmailUniqueForCreate(email);
+        String normalizedEmail = normalizeEmail(email);
+        validateEmailUniqueForCreate(normalizedEmail);
 
         User user = new User();
-        user.setEmail(email);
+        user.setEmail(normalizedEmail);
         user.setDisplayName(displayName);
         user.setPasswordHash(passwordEncoder.encode(rawPassword));
 
         try {
             return userRepository.save(user);
         } catch (DataIntegrityViolationException ex) {
-            throw new ConflictException("Email already exists: " + email);
+            throw new ConflictException("Email already exists: " + normalizedEmail);
         }
     }
 
@@ -55,8 +46,9 @@ public class UserService {
         User user = findUserById(userId);
 
         if (email != null) {
-            validateEmailUniqueForUpdate(email, userId);
-            user.setEmail(email);
+            String normalizedEmail = normalizeEmail(email);
+            validateEmailUniqueForUpdate(normalizedEmail, userId);
+            user.setEmail(normalizedEmail);
         }
 
         if (displayName != null) {
@@ -97,7 +89,7 @@ public class UserService {
 
     private void validateEmailUniqueForCreate(String email) {
         if (userRepository.existsByEmailIgnoreCase(email)) {
-            throw new BadRequestException("Email already exists: " + email);
+            throw new ConflictException("Email already exists: " + email);
         }
     }
 
@@ -105,6 +97,10 @@ public class UserService {
         if (userRepository.existsByEmailIgnoreCaseAndIdNot(email, userId)) {
             throw new ConflictException("Email already exists: " + email);
         }
+    }
+
+    private String normalizeEmail(String email) {
+        return email.toLowerCase(Locale.ROOT);
     }
 
     // TODO: FIX

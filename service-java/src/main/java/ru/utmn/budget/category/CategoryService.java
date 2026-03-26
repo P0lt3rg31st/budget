@@ -31,8 +31,7 @@ public class CategoryService {
     private final UserRepository userRepository;
     private final CategoryMapper categoryMapper;
 
-    public List<CategoryDto> getCategories(CashflowType type, int from, int size) {
-        Long userId = getCurrentUserId();
+    public List<CategoryDto> getCategories(Long userId, CashflowType type, int from, int size) {
         OffsetPageRequest pageable = buildPageable(from, size);
 
         List<Category> categories = (type == null)
@@ -44,15 +43,13 @@ public class CategoryService {
                 .toList();
     }
 
-    public CategoryDto getCategoryById(Long categoryId) {
-        Long userId = getCurrentUserId();
+    public CategoryDto getCategoryById(Long userId, Long categoryId) {
         Category category = getOwnedCategory(userId, categoryId);
         return categoryMapper.toDto(category);
     }
 
     @Transactional
-    public CategoryDto createCategory(CategoryCreateRequest request) {
-        Long userId = getCurrentUserId();
+    public CategoryDto createCategory(Long userId, CategoryCreateRequest request) {
         String normalizedName = normalizeName(request.name());
 
         assertCategoryNameUniqueForCreate(userId, request.type(), normalizedName);
@@ -70,8 +67,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryDto updateCategory(Long categoryId, CategoryUpdateRequest request) {
-        Long userId = getCurrentUserId();
+    public CategoryDto updateCategory(Long userId, Long categoryId, CategoryUpdateRequest request) {
         Category category = getOwnedCategory(userId, categoryId);
 
         updateNameIfPresent(category, request);
@@ -170,11 +166,5 @@ public class CategoryService {
 
     private String normalizeName(String rawName) {
         return rawName == null ? null : rawName.trim().replaceAll("\\s+", " ");
-    }
-
-    //TODO: УБРАТЬ!!!!!!!!!!!!!
-    //ЗАГЛУШКА!!!!!!!!!!!
-    private Long getCurrentUserId() {
-        return 1L;
     }
 }
