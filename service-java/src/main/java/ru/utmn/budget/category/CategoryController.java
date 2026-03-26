@@ -35,15 +35,6 @@ public class CategoryController {
         return categoryService.getCategories(userId, type, from, size);
     }
 
-    @GetMapping("/{categoryId}")
-    public CategoryDto getCategoryById(
-            @AuthenticationPrincipal Jwt jwt,
-            @PathVariable Long categoryId
-    ) {
-        Long userId = extractUserId(jwt);
-        return categoryService.getCategoryById(userId, categoryId);
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto createCategory(
@@ -54,14 +45,23 @@ public class CategoryController {
         return categoryService.createCategory(userId, request);
     }
 
-    @PatchMapping("/{categoryId}")
+    @GetMapping("/{id}")
+    public CategoryDto getCategoryById(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable("id") Long id
+    ) {
+        Long userId = extractUserId(jwt);
+        return categoryService.getCategoryById(userId, id);
+    }
+
+    @PatchMapping("/{id}")
     public CategoryDto updateCategory(
             @AuthenticationPrincipal Jwt jwt,
-            @PathVariable Long categoryId,
+            @PathVariable("id") Long id,
             @RequestBody @Valid CategoryUpdateRequest request
     ) {
         Long userId = extractUserId(jwt);
-        return categoryService.updateCategory(userId, categoryId, request);
+        return categoryService.updateCategory(userId, id, request);
     }
 
     private Long extractUserId(Jwt jwt) {
