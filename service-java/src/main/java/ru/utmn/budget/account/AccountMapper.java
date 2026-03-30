@@ -12,6 +12,10 @@ import ru.utmn.budget.specdto.accounts.AccountDto;
 import ru.utmn.budget.specdto.accounts.AccountUpdateRequest;
 import ru.utmn.budget.specdto.common.CurrencyCode;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+
 @Mapper(
         componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.ERROR
@@ -43,5 +47,9 @@ public interface AccountMapper {
 
     default CurrencyCode map(String currency) {
         return currency == null ? null : new CurrencyCode(currency);
+    }
+
+    default OffsetDateTime map(Instant instant) {
+        return instant == null ? null : instant.atOffset(ZoneOffset.UTC);
     }
 }

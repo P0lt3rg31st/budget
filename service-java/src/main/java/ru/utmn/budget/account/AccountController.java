@@ -43,7 +43,7 @@ public class AccountController {
     @GetMapping("/{accountId}")
     public ResponseEntity<AccountDto> getAccount(
             @AuthenticationPrincipal Jwt jwt,
-            @PathVariable @Positive Long accountId
+            @PathVariable("accountId") @Positive Long accountId
     ) {
         Long userId = extractUserId(jwt);
         Account account = accountService.findById(userId, accountId);
@@ -72,7 +72,7 @@ public class AccountController {
     @PatchMapping("/{accountId}")
     public ResponseEntity<AccountDto> updateAccount(
             @AuthenticationPrincipal Jwt jwt,
-            @PathVariable @Positive Long accountId,
+            @PathVariable("accountId") @Positive Long accountId,
             @Valid @RequestBody AccountUpdateRequest request
     ) {
         Long userId = extractUserId(jwt);
