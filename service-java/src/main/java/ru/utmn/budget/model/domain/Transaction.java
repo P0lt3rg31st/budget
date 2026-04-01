@@ -26,16 +26,16 @@ public class Transaction {
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, length = 10)
     private CashflowType type;
 
-    @Column(name = "merchant_name", length = 120)
-    private String merchantName;
+    @Column(name = "counterparty_name", length = 120)
+    private String counterpartyName;
 
     @Column(name = "note", length = 500)
     private String note;
@@ -45,9 +45,6 @@ public class Transaction {
 
     @Column(name = "amount", nullable = false, precision = 19, scale = 8)
     private BigDecimal amount;
-
-    @Column(name = "currency", nullable = false, length = 3)
-    private String currency;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

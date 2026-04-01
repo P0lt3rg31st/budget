@@ -1,14 +1,33 @@
 package ru.utmn.budget.specdto.transactions;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import ru.utmn.budget.util.CashflowType;
+
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import ru.utmn.budget.specdto.common.Money;
 
 public record TransactionUpdateRequest(
-        Long accountId,
+        CashflowType type,
+
+        @Positive
         Long categoryId,
-        String merchantName,
+
+        @Size(max = 120)
+        @Pattern(regexp = ".*\\S.*", message = "counterpartyName must not be blank")
+        String counterpartyName,
+
+        @Size(max = 500)
+        @Pattern(regexp = ".*\\S.*", message = "note must not be blank")
         String note,
+
         OffsetDateTime occurredAt,
-        Money money
+
+        @DecimalMin(value = "0.0", inclusive = false)
+        @Digits(integer = 11, fraction = 8)
+        BigDecimal amount
 ) {
 }
