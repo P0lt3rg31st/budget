@@ -58,7 +58,7 @@ public class TransactionController {
     @GetMapping("/{transactionId}")
     public TransactionDto getTransaction(
             @AuthenticationPrincipal Jwt jwt,
-            @PathVariable @Positive Long transactionId
+            @PathVariable("transactionId") @Positive Long transactionId
     ) {
         Long userId = extractUserId(jwt);
         return transactionService.getTransaction(userId, transactionId);
@@ -80,7 +80,7 @@ public class TransactionController {
     @PatchMapping("/{transactionId}")
     public TransactionDto update(
             @AuthenticationPrincipal Jwt jwt,
-            @PathVariable @Positive Long transactionId,
+            @PathVariable("transactionId") @Positive Long transactionId,
             @Valid @RequestBody TransactionUpdateRequest request
     ) {
         Long userId = extractUserId(jwt);
@@ -90,7 +90,7 @@ public class TransactionController {
     @DeleteMapping("/{transactionId}")
     public ResponseEntity<Void> delete(
             @AuthenticationPrincipal Jwt jwt,
-            @PathVariable @Positive Long transactionId
+            @PathVariable("transactionId") @Positive Long transactionId
     ) {
         Long userId = extractUserId(jwt);
         transactionService.delete(userId, transactionId);

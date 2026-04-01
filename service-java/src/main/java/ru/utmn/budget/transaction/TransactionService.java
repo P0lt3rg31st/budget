@@ -1,6 +1,5 @@
 package ru.utmn.budget.transaction;
 
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -8,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.utmn.budget.OffsetPageRequest;
 import ru.utmn.budget.account.AccountRepository;
 import ru.utmn.budget.category.CategoryRepository;
+import ru.utmn.budget.handler.BadRequestException;
+import ru.utmn.budget.handler.ConflictException;
 import ru.utmn.budget.handler.NotFoundException;
 import ru.utmn.budget.model.domain.Account;
 import ru.utmn.budget.model.domain.Category;
@@ -146,7 +147,7 @@ public class TransactionService {
 
     private void validateCategoryMatchesType(Category category, CashflowType type) {
         if (category.getType() != type) {
-            throw new ValidationException(
+            throw new BadRequestException(
                     "Category type does not match transaction type"
             );
         }
@@ -154,7 +155,7 @@ public class TransactionService {
 
     private void validateDateRange(Instant occurredFrom, Instant occurredTo) {
         if (occurredFrom != null && occurredTo != null && occurredFrom.isAfter(occurredTo)) {
-            throw new ValidationException("occurredFrom must be <= occurredTo");
+            throw new BadRequestException("occurredFrom must be <= occurredTo");
         }
     }
 
@@ -165,19 +166,19 @@ public class TransactionService {
                 && request.note() == null
                 && request.occurredAt() == null
                 && request.amount() == null) {
-            throw new ValidationException("Patch request must contain at least one field");
+            throw new BadRequestException("Patch request must contain at least one field");
         }
     }
 
     private void validateActiveAccount(Account account) {
         if (account.isArchived()) {
-            throw new ValidationException("Archived account cannot be used for new transactions");
+            throw new BadRequestException("Archived account cannot be used for new transactions");
         }
     }
 
     private void validateActiveCategory(Category category) {
         if (category.isArchived()) {
-            throw new ValidationException("Archived category cannot be used for new transactions");
+            throw new BadRequestException("Archived category cannot be used for new transactions");
         }
     }
 }
