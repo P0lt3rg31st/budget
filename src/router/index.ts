@@ -9,40 +9,7 @@ import {
 } from 'vue-router';
 import { setupAuthGuard } from './guards';
 import routes from './routes';
-
-// const routes: RouteRecordRaw[] = [
-//   {
-//     path: '/login',
-//     name: 'login',
-//     component: () => import('pages/LoginPage.vue'),
-//     meta: { public: true },
-//   },
-//   {
-//     path: '/',
-//     component: () => import('layouts/MainLayout.vue'),
-//     children: [
-//       {
-//         path: '',
-//         name: 'index',
-//         component: () => import('pages/DashboardPage.vue'),
-//       },
-//       {
-//         path: 'accounts',
-//         name: 'accounts',
-//         component: () => import('pages/AccountsPage.vue'),
-//       },
-//       {
-//         path: 'categories',
-//         name: 'categories',
-//         component: () => import('pages/CategoriesPage.vue'),
-//       },
-//     ],
-//   },
-//   {
-//     path: '/:catchAll(.*)*',
-//     component: () => import('pages/ErrorNotFound.vue'),
-//   },
-// ];
+import { setRouter } from './router';
 
 export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
@@ -56,6 +23,8 @@ export default route(function (/* { store, ssrContext } */) {
     routes,
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
+
+  setRouter(Router);
 
   // 🔐 Подключаем гард
   setupAuthGuard(Router);

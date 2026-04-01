@@ -3,9 +3,11 @@
 
         <q-header elevated class="bg-primary">
             <q-toolbar>
-            <q-toolbar-title class="text-weight-bold">
-                Финансовый дневник
-            </q-toolbar-title>
+                <q-toolbar-title class="text-weight-bold">
+                    <router-link to="/" class="text-white text-decoration-none" style="text-decoration: none; color: inherit;">
+                        Финансовый дневник
+                    </router-link>
+                </q-toolbar-title>
             </q-toolbar>
         </q-header>
 

@@ -1,34 +1,35 @@
 <!-- src/pages/LoginPage.vue -->
 <template>
     <q-page class="q-pa-md">
-        <div class="login-page full-height flex flex-center bg-grey-1">
+        <div class="login-page full-height flex flex-center">
             <q-card class="q-pa-lg" style="width: 100%; max-width: 400px">
                 <q-card-section class="text-center">
                     <div class="text-h5 q-mb-md">Вход в систему</div>
                 </q-card-section>
         
                 <q-card-section>
-                    <q-form @submit="onSubmit" class="q-gutter-md">
+                    <q-form @submit="onSubmit" class="">
                         <q-input
-                        v-model="form.email"
-                        label="Email"
-                        type="email"
-                        :rules="[val => !!val || 'Email обязателен', val => /.+@.+\..+/.test(val) || 'Некорректный email']"
+                            v-model="form.email"
+                            label="Email"
+                            type="email"
+                            bg-color="white"
+                            :rules="[val => !!val || 'Email обязателен', val => /.+@.+\..+/.test(val) || 'Некорректный email']"
                         />
             
                         <q-input
-                        v-model="form.password"
-                        label="Пароль"
-                        type="password"
-                        :rules="[val => !!val || 'Пароль обязателен']"
+                            v-model="form.password"
+                            label="Пароль"
+                            type="password"
+                            :rules="[val => !!val || 'Пароль обязателен']"
                         />
             
                         <q-btn
-                        :loading="loginMutation.isPending.value"
-                        label="Войти"
-                        type="submit"
-                        color="primary"
-                        class="full-width"
+                            :loading="loginMutation.isPending.value"
+                            label="Войти"
+                            type="submit"
+                            color="primary"
+                            class="full-width"
                         />
             
                         <q-banner
@@ -78,15 +79,15 @@
   
       // Редирект на страницу, с которой перенаправили, или на главную
       const redirect = route.query.redirect as string || '/';
-      router.replace(redirect);
+    //   router.replace(redirect);
     } catch (error: any) {
       console.error('Login error:', error);
     }
   };
   </script>
   
-  <style scoped>
-  .login-page {
+<style scoped>
+.login-page {
     min-height: 100vh;
-  }
-  </style>
+}
+</style>

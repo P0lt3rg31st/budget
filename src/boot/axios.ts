@@ -1,6 +1,8 @@
 
+import { getRouter } from 'src/router/router';
 import { useAuthStore } from '../stores/auth';
 import api from 'src/services/api';
+
 
 // добавляем токен
 api.interceptors.request.use((config) => {
@@ -17,10 +19,11 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
+
     if (error.response?.status === 401) {
       const authStore = useAuthStore();
       authStore.logout();
-      window.location.href = '/login';
+      getRouter().push('/auth/login');
     }
     return Promise.reject(error);
   }
