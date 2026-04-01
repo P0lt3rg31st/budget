@@ -39,7 +39,9 @@ export const categoriesApi = {
 export const useCategoriesQuery = (params?: Ref<ListCategoriesParams>) => {
   return useQuery({
     queryKey: ['categories', params],
-    queryFn: () => categoriesApi.list(params?.value),
+    queryFn: () => categoriesApi.list(params?.value).then(cats => {
+        return cats;
+    }),
   });
 };
 

@@ -18,6 +18,8 @@ export interface CategoryUpdateRequest {
   archived?: boolean;
 }
 
-export interface CategoryListResponse {
-  items: Category[];
-}
+export type CategoryListResponse = Category[];
+
+// export interface CategoryListResponse {
+//     items: Category[];
+// }

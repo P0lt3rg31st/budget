@@ -144,7 +144,7 @@ const queryParams = computed(() => ({
 
 const { data, isLoading } = useCategoriesQuery(queryParams);
 
-const categories = computed<Category[]>(() => data.value?.items || []);
+const categories = computed<Category[]>(() => data.value || []);
 const totalPages = computed(() => {
   const count = categories.value.length;
   return count > 0 ? Math.ceil(count / PAGE_SIZE) : 1;

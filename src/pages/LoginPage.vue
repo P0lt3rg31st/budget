@@ -85,7 +85,7 @@
 
       // Редирект на страницу, с которой перенаправили, или на главную
       const redirect = route.query.redirect as string || '/';
-    //   router.replace(redirect);
+      router.replace(redirect);
     } catch (error: any) {
       console.error('Login error:', error);
     }
