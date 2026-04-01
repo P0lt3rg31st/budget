@@ -95,9 +95,6 @@
         "security": [],
         "parameters": [
           {
-            "$ref": "#/components/parameters/idempotencyKeyHeader"
-          },
-          {
             "$ref": "#/components/parameters/requestIdHeader"
           }
         ],
@@ -146,9 +143,6 @@
         "security": [],
         "parameters": [
           {
-            "$ref": "#/components/parameters/idempotencyKeyHeader"
-          },
-          {
             "$ref": "#/components/parameters/requestIdHeader"
           }
         ],
@@ -175,9 +169,6 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/requestId"
-              },
-              "Idempotency-Key": {
-                "$ref": "#/components/headers/idempotencyKey"
               }
             }
           },
@@ -408,9 +399,6 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/requestId"
-              },
-              "Idempotency-Key": {
-                "$ref": "#/components/headers/idempotencyKey"
               }
             }
           },
@@ -422,9 +410,6 @@
           }
         },
         "parameters": [
-          {
-            "$ref": "#/components/parameters/idempotencyKeyHeader"
-          },
           {
             "$ref": "#/components/parameters/requestIdHeader"
           }
@@ -593,9 +578,6 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/requestId"
-              },
-              "Idempotency-Key": {
-                "$ref": "#/components/headers/idempotencyKey"
               }
             }
           },
@@ -610,9 +592,6 @@
           }
         },
         "parameters": [
-          {
-            "$ref": "#/components/parameters/idempotencyKeyHeader"
-          },
           {
             "$ref": "#/components/parameters/requestIdHeader"
           }
@@ -800,9 +779,6 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/requestId"
-              },
-              "Idempotency-Key": {
-                "$ref": "#/components/headers/idempotencyKey"
               }
             }
           },
@@ -817,9 +793,6 @@
           }
         },
         "parameters": [
-          {
-            "$ref": "#/components/parameters/idempotencyKeyHeader"
-          },
           {
             "$ref": "#/components/parameters/requestIdHeader"
           }
@@ -1069,9 +1042,6 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/requestId"
-              },
-              "Idempotency-Key": {
-                "$ref": "#/components/headers/idempotencyKey"
               }
             }
           },
@@ -1086,9 +1056,6 @@
           }
         },
         "parameters": [
-          {
-            "$ref": "#/components/parameters/idempotencyKeyHeader"
-          },
           {
             "$ref": "#/components/parameters/requestIdHeader"
           }
@@ -1261,9 +1228,6 @@
               "X-Request-Id": {
                 "$ref": "#/components/headers/requestId"
               },
-              "Idempotency-Key": {
-                "$ref": "#/components/headers/idempotencyKey"
-              },
               "Location": {
                 "$ref": "#/components/headers/location"
               },
@@ -1283,9 +1247,6 @@
           }
         },
         "parameters": [
-          {
-            "$ref": "#/components/parameters/idempotencyKeyHeader"
-          },
           {
             "$ref": "#/components/parameters/requestIdHeader"
           }
@@ -1537,9 +1498,6 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/requestId"
-              },
-              "Idempotency-Key": {
-                "$ref": "#/components/headers/idempotencyKey"
               }
             }
           },
@@ -1551,9 +1509,6 @@
           }
         },
         "parameters": [
-          {
-            "$ref": "#/components/parameters/idempotencyKeyHeader"
-          },
           {
             "$ref": "#/components/parameters/requestIdHeader"
           }
@@ -1591,9 +1546,6 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/requestId"
-              },
-              "Idempotency-Key": {
-                "$ref": "#/components/headers/idempotencyKey"
               }
             }
           },
@@ -1605,9 +1557,6 @@
           }
         },
         "parameters": [
-          {
-            "$ref": "#/components/parameters/idempotencyKeyHeader"
-          },
           {
             "$ref": "#/components/parameters/requestIdHeader"
           }
@@ -1650,9 +1599,6 @@
         },
         "parameters": [
           {
-            "$ref": "#/components/parameters/idempotencyKeyHeader"
-          },
-          {
             "$ref": "#/components/parameters/requestIdHeader"
           }
         ]
@@ -1676,15 +1622,6 @@
           "maxLength": 64
         },
         "example": "req_7b1f2b6a2b4a4b0b"
-      },
-      "idempotencyKey": {
-        "description": "Idempotency key for safe retries of POST. Same key -> same result.",
-        "schema": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 128
-        },
-        "example": "idem_20260305_001"
       },
       "location": {
         "description": "URL to poll async resource status.",
@@ -1735,17 +1672,6 @@
           "type": "string",
           "minLength": 8,
           "maxLength": 64
-        }
-      },
-      "idempotencyKeyHeader": {
-        "name": "Idempotency-Key",
-        "in": "header",
-        "required": false,
-        "description": "Recommended for POST requests. Allows safe retries without duplicates.",
-        "schema": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 128
         }
       },
       "accountId": {
