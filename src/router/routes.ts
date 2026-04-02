@@ -40,6 +40,21 @@ const routes: RouteRecordRaw[] = [
             name: 'account-edit',
             component: () => import('../pages/AccountFormPage.vue')
         },
+        {
+            path: 'transactions',
+            name: 'transactions',
+            component: () => import('../pages/TransactionsPage.vue')
+        },
+        {
+            path: 'transactions/new',
+            name: 'transaction-new',
+            component: () => import('../pages/TransactionFormPage.vue')
+        },
+        {
+            path: 'transactions/:id/edit',
+            name: 'transaction-edit',
+            component: () => import('../pages/TransactionFormPage.vue')
+        },
     ]
   },
   {

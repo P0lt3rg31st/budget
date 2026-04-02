@@ -56,6 +56,15 @@
           </q-item-section>
         </q-item>
 
+        <q-item clickable v-ripple to="/transactions" exact>
+          <q-item-section avatar>
+            <q-icon name="swap_horiz" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Транзакции</q-item-label>
+          </q-item-section>
+        </q-item>
+
         <q-item clickable v-ripple @click="logout">
           <q-item-section avatar>
             <q-icon name="logout" />
