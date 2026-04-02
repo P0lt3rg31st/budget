@@ -197,7 +197,6 @@
 import { ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
-import { date } from 'quasar';
 import type { Transaction, FlowType } from 'src/types/transaction';
 import {
   useTransactionsQuery,
@@ -221,12 +220,32 @@ const currentPage = ref(1);
 
 const from = computed(() => (currentPage.value - 1) * PAGE_SIZE);
 
+const applyFilters = () => {
+  // Фильтры применяются реактивно через queryParams
+};
+
+const resetFilters = () => {
+  filterAccountId.value = null;
+  filterType.value = null;
+  filterCategoryId.value = null;
+  filterDateFrom.value = null;
+  filterDateTo.value = null;
+  currentPage.value = 1;
+};
+
+// Convert date (YYYY-MM-DD) to ISO-8601 datetime with timezone
+const formatDateToIso = (dateStr: string | null): string | undefined => {
+  if (!dateStr) return undefined;
+  // Create date at midnight and convert to ISO
+  return new Date(dateStr).toISOString();
+};
+
 const queryParams = computed(() => ({
   accountId: filterAccountId.value || undefined,
   type: filterType.value || undefined,
   categoryId: filterCategoryId.value || undefined,
-  occurredFrom: filterDateFrom.value || undefined,
-  occurredTo: filterDateTo.value || undefined,
+  occurredFrom: formatDateToIso(filterDateFrom.value),
+  occurredTo: formatDateToIso(filterDateTo.value),
   from: from.value || undefined,
   size: PAGE_SIZE || undefined,
 }));
@@ -261,19 +280,6 @@ const typeOptions = [
 watch([filterAccountId, filterType, filterCategoryId, filterDateFrom, filterDateTo], () => {
   currentPage.value = 1;
 });
-
-const applyFilters = () => {
-  // Фильтры применяются реактивно через queryParams
-};
-
-const resetFilters = () => {
-  filterAccountId.value = null;
-  filterType.value = null;
-  filterCategoryId.value = null;
-  filterDateFrom.value = null;
-  filterDateTo.value = null;
-  currentPage.value = 1;
-};
 
 const deleteMutation = useDeleteTransactionMutation();
 
@@ -322,7 +328,15 @@ const formatAmount = (amount: string, type: FlowType) => {
 };
 
 const formatDate = (dateString: string) => {
-  return date.formatDate(dateString, 'DD.MM.YYYY');
+  // Parse ISO-8601 date and format to DD.MM.YYYY HH:mm
+  const date = new Date(dateString);
+  return date.toLocaleString('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 };
 
 const getCategoryName = (categoryId: number) => {

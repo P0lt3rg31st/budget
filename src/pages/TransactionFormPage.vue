@@ -45,8 +45,8 @@
 
           <q-input
             v-model="form.occurredAt"
-            label="Дата"
-            type="date"
+            label="Дата и время"
+            type="datetime-local"
             :rules="[val => !!val || 'Дата обязательна']"
             class="q-mb-md"
           />
@@ -111,7 +111,6 @@
 import { ref, computed, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useQuasar } from 'quasar';
-import { date } from 'quasar';
 import type { FlowType, TransactionCreateRequest, TransactionUpdateRequest } from 'src/types/transaction';
 import {
   useTransactionQuery,
@@ -131,7 +130,7 @@ const form = ref({
   accountId: 0 as number | null,
   type: 'EXPENSE' as FlowType,
   amount: '',
-  occurredAt: date.formatDate(Date.now(), 'YYYY-MM-DD') as string,
+  occurredAt: new Date().toISOString().slice(0, 16) as string,
   categoryId: 0 as number | null,
   counterpartyName: '',
   note: '',
@@ -170,7 +169,8 @@ watch(
       form.value.accountId = transaction.accountId;
       form.value.type = transaction.type;
       form.value.amount = transaction.amount;
-      form.value.occurredAt = date.formatDate(transaction.occurredAt, 'YYYY-MM-DD') as string;
+      // Convert ISO-8601 to datetime-local format (YYYY-MM-DDTHH:mm)
+      form.value.occurredAt = transaction.occurredAt.slice(0, 16);
       form.value.categoryId = transaction.categoryId;
       form.value.counterpartyName = transaction.counterpartyName || '';
       form.value.note = transaction.note || '';
@@ -181,13 +181,16 @@ watch(
 
 const onSubmit = async () => {
   try {
+    // Convert datetime-local to ISO-8601 with timezone offset
+    const occurredAtIso = new Date(form.value.occurredAt).toISOString();
+    
     if (isEditMode.value) {
       const request: TransactionUpdateRequest = {
         type: form.value.type,
         categoryId: form.value.categoryId!,
         counterpartyName: form.value.counterpartyName || null,
         note: form.value.note || null,
-        occurredAt: form.value.occurredAt,
+        occurredAt: occurredAtIso,
         amount: form.value.amount,
       };
       await updateMutation.mutateAsync({
@@ -206,7 +209,7 @@ const onSubmit = async () => {
         categoryId: form.value.categoryId!,
         counterpartyName: form.value.counterpartyName || null,
         note: form.value.note || null,
-        occurredAt: form.value.occurredAt,
+        occurredAt: occurredAtIso,
         amount: form.value.amount,
       };
       await createMutation.mutateAsync(request);
