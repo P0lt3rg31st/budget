@@ -44,7 +44,7 @@ public class AccountService {
         findUserById(userId);
 
         OffsetPageRequest pageRequest = OffsetPageRequest.of(from, size, ACCOUNT_SORT);
-        return accountRepository.findAllByUser_Id(userId, pageRequest);
+        return accountRepository.findAllByUser_IdAndArchivedFalse(userId, pageRequest);
     }
 
     public Account findById(Long userId, Long accountId) {
@@ -84,7 +84,7 @@ public class AccountService {
     }
 
     private Account findOwnedAccountById(Long userId, Long accountId) {
-        return accountRepository.findByIdAndUser_Id(accountId, userId)
+        return accountRepository.findByIdAndUser_IdAndArchivedFalse(accountId, userId)
                 .orElseThrow(() -> new NotFoundException("Account with id=" + accountId + " was not found"));
     }
 }

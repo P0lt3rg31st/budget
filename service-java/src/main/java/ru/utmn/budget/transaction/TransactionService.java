@@ -132,14 +132,14 @@ public class TransactionService {
     }
 
     private Account getOwnedAccountOrThrow(Long accountId, Long userId) {
-        return accountRepository.findByIdAndUser_Id(accountId, userId)
+        return accountRepository.findByIdAndUser_IdAndArchivedFalse(accountId, userId)
                 .orElseThrow(() -> new NotFoundException(
                         "Account with id=" + accountId + " not found"
                 ));
     }
 
     private Category getOwnedCategoryOrThrow(Long categoryId, Long userId) {
-        return categoryRepository.findByIdAndUser_Id(categoryId, userId)
+        return categoryRepository.findByIdAndUser_IdAndArchivedFalse(categoryId, userId)
                 .orElseThrow(() -> new NotFoundException(
                         "Category with id=" + categoryId + " not found"
                 ));

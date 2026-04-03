@@ -35,8 +35,8 @@ public class CategoryService {
         OffsetPageRequest pageable = buildPageable(from, size);
 
         List<Category> categories = (type == null)
-                ? categoryRepository.findAllByUser_Id(userId, pageable)
-                : categoryRepository.findAllByUser_IdAndType(userId, type, pageable);
+                ? categoryRepository.findAllByUser_IdAndArchivedFalse(userId, pageable)
+                : categoryRepository.findAllByUser_IdAndTypeAndArchivedFalse(userId, type, pageable);
 
         return categories.stream()
                 .map(categoryMapper::toDto)
@@ -92,7 +92,7 @@ public class CategoryService {
     }
 
     private Category getOwnedCategory(Long userId, Long categoryId) {
-        return categoryRepository.findByIdAndUser_Id(categoryId, userId)
+        return categoryRepository.findByIdAndUser_IdAndArchivedFalse(categoryId, userId)
                 .orElseThrow(() -> new NotFoundException(
                         "Category with id=%d was not found".formatted(categoryId)
                 ));

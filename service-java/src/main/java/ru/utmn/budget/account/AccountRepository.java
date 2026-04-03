@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    List<Account> findAllByUser_Id(Long userId, Pageable pageable);
+    List<Account> findAllByUser_IdAndArchivedFalse(Long userId, Pageable pageable);
 
-    Optional<Account> findByIdAndUser_Id(Long accountId, Long userId);
+    Optional<Account> findByIdAndUser_IdAndArchivedFalse(Long accountId, Long userId);
 }

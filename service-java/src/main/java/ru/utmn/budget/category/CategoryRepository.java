@@ -10,11 +10,15 @@ import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    Optional<Category> findByIdAndUser_Id(Long categoryId, Long userId);
+    Optional<Category> findByIdAndUser_IdAndArchivedFalse(Long categoryId, Long userId);
 
-    List<Category> findAllByUser_Id(Long userId, Pageable pageable);
+    List<Category> findAllByUser_IdAndArchivedFalse(Long userId, Pageable pageable);
 
-    List<Category> findAllByUser_IdAndType(Long userId, CashflowType type, Pageable pageable);
+    List<Category> findAllByUser_IdAndTypeAndArchivedFalse(
+            Long userId,
+            CashflowType type,
+            Pageable pageable
+    );
 
     boolean existsByUser_IdAndTypeAndNameIgnoreCase(
             Long userId,
@@ -28,5 +32,4 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             String name,
             Long categoryId
     );
-
 }
