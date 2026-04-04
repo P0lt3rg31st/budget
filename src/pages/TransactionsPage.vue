@@ -10,7 +10,7 @@
       <q-card>
         <q-card-section class="q-pa-md">
           <div class="row q-col-gutter-sm">
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-4">
               <q-select
                 v-model="filterAccountId"
                 :options="accountOptions"
@@ -21,7 +21,7 @@
                 dense
               />
             </div>
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-4">
               <q-select
                 v-model="filterType"
                 :options="typeOptions"
@@ -32,7 +32,7 @@
                 dense
               />
             </div>
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-4">
               <q-select
                 v-model="filterCategoryId"
                 :options="categoryOptions"
@@ -43,7 +43,7 @@
                 dense
               />
             </div>
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-4">
               <q-input
                 v-model="filterDateFrom"
                 type="date"
@@ -52,7 +52,7 @@
                 clearable
               />
             </div>
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-4">
               <q-input
                 v-model="filterDateTo"
                 type="date"
@@ -62,6 +62,7 @@
               />
             </div>
           </div>
+          <!--
           <div class="row q-mt-sm">
             <q-btn
               label="Применить"
@@ -77,6 +78,7 @@
               @click="resetFilters"
             />
           </div>
+          -->
         </q-card-section>
       </q-card>
     </div>

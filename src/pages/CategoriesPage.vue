@@ -108,8 +108,8 @@
             flat
             label="Удалить"
             color="negative"
-            :loading="deleteMutation.isPending.value"
-            @click="deleteCategory"
+            :loading="archiveMutation.isPending.value"
+            @click="archiveCategory"
           />
         </q-card-actions>
       </q-card>
@@ -124,7 +124,7 @@ import { useQuasar } from 'quasar';
 import type { Category, CategoryType } from 'src/types/category';
 import {
   useCategoriesQuery,
-  useDeleteCategoryMutation,
+  useArchiveCategoryMutation,
 } from 'src/services/categories.api';
 
 const router = useRouter();
@@ -150,7 +150,7 @@ const totalPages = computed(() => {
   return count > 0 ? Math.ceil(count / PAGE_SIZE) : 1;
 });
 
-const deleteMutation = useDeleteCategoryMutation();
+const archiveMutation = useArchiveCategoryMutation();
 
 const deleteDialog = ref(false);
 const categoryToDelete = ref<Category | null>(null);
@@ -172,11 +172,11 @@ const resetDelete = () => {
   categoryToDelete.value = null;
 };
 
-const deleteCategory = async () => {
+const archiveCategory = async () => {
   if (!categoryToDelete.value) return;
 
   try {
-    await deleteMutation.mutateAsync(categoryToDelete.value.id);
+    await archiveMutation.mutateAsync(categoryToDelete.value.id);
     $q.notify({
       type: 'positive',
       message: 'Категория успешно удалена',

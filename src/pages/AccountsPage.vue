@@ -94,8 +94,8 @@
             flat
             label="Удалить"
             color="negative"
-            :loading="deleteMutation.isPending.value"
-            @click="deleteAccount"
+            :loading="archiveMutation.isPending.value"
+            @click="archiveAccount"
           />
         </q-card-actions>
       </q-card>
@@ -110,7 +110,7 @@ import { useQuasar } from 'quasar';
 import type { Account } from 'src/types/account';
 import {
   useAccountsQuery,
-  useDeleteAccountMutation,
+  useArchiveAccountMutation,
 } from 'src/services/accounts.api';
 
 const router = useRouter();
@@ -134,7 +134,7 @@ const totalPages = computed(() => {
   return count > 0 ? Math.ceil(count / PAGE_SIZE) : 1;
 });
 
-const deleteMutation = useDeleteAccountMutation();
+const archiveMutation = useArchiveAccountMutation();
 
 const deleteDialog = ref(false);
 const accountToDelete = ref<Account | null>(null);
@@ -156,11 +156,11 @@ const resetDelete = () => {
   accountToDelete.value = null;
 };
 
-const deleteAccount = async () => {
+const archiveAccount = async () => {
   if (!accountToDelete.value) return;
 
   try {
-    await deleteMutation.mutateAsync(accountToDelete.value.id);
+    await archiveMutation.mutateAsync(accountToDelete.value.id);
     $q.notify({
       type: 'positive',
       message: 'Счет успешно удален',

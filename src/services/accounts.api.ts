@@ -30,8 +30,9 @@ export const accountsApi = {
     return data;
   },
 
-  delete: async (id: number): Promise<void> => {
-    await api.delete(`/api/v1/accounts/${id}`);
+  archive: async (id: number): Promise<Account> => {
+    const { data } = await api.patch<Account>(`/api/v1/accounts/${id}`, { archived: true });
+    return data;
   },
 };
 
@@ -74,11 +75,11 @@ export const useUpdateAccountMutation = () => {
   });
 };
 
-export const useDeleteAccountMutation = () => {
+export const useArchiveAccountMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: accountsApi.delete,
+    mutationFn: accountsApi.archive,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
     },

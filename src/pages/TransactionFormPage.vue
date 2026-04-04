@@ -127,11 +127,11 @@ const $q = useQuasar();
 const isEditMode = computed(() => !!route.params.id);
 
 const form = ref({
-  accountId: 0 as number | null,
+  accountId: null as number | null,
   type: 'EXPENSE' as FlowType,
   amount: '',
   occurredAt: new Date().toISOString().slice(0, 16) as string,
-  categoryId: 0 as number | null,
+  categoryId: null as number | null,
   counterpartyName: '',
   note: '',
 });

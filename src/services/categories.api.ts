@@ -12,7 +12,7 @@ export interface ListCategoriesParams {
 
 export const categoriesApi = {
   list: async (params?: ListCategoriesParams): Promise<CategoryListResponse> => {
-    const { data } = await api.get<CategoryListResponse>('/api/v1/categories', { params });
+    const { data } = await api.get<CategoryListResponse>('/api/v1/categories', { params: { ...params, archived: false } });
     return data;
   },
 
@@ -31,8 +31,9 @@ export const categoriesApi = {
     return data;
   },
 
-  delete: async (id: number): Promise<void> => {
-    await api.delete(`/api/v1/categories/${id}`);
+  archive: async (id: number): Promise<Category> => {
+    const { data } = await api.patch<Category>(`/api/v1/categories/${id}`, { archived: true });
+    return data;
   },
 };
 
@@ -77,11 +78,11 @@ export const useUpdateCategoryMutation = () => {
   });
 };
 
-export const useDeleteCategoryMutation = () => {
+export const useArchiveCategoryMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: categoriesApi.delete,
+    mutationFn: categoriesApi.archive,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
     },
