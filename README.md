@@ -1,24 +1,17 @@
-# todos (todos)
+# Финансовый дневник (фронтенд)
 
-todos app
-
-## Install the dependencies
+## Установка зависимостей
 ```bash
-yarn
-# or
 npm install
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+### Запуск приложения в режиме разработки
 ```bash
-quasar dev
+npm run dev
 ```
 
 
-### Build the app for production
+### Компиляция приложения
 ```bash
-quasar build
+npm run build
 ```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
