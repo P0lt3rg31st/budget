@@ -39,7 +39,7 @@ public class TransactionController {
             @RequestParam(name = "occurredTo", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant occurredTo,
             @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
-            @RequestParam(name = "size", defaultValue = "20") @Positive @Max(200) int size
+            @RequestParam(name = "size", defaultValue = "20") @Positive @Max(2000) int size
     ) {
         Long userId = extractUserId(jwt);
 
