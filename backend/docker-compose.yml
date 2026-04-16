@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16
+    container_name: budget-db
+    environment:
+      POSTGRES_DB: budget
+      POSTGRES_USER: budget
+      POSTGRES_PASSWORD: budget
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U budget -d budget"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - budget_pg_data:/var/lib/postgresql/data
+
+  service-java:
+    build:
+      context: .
+      dockerfile: service-java/Dockerfile
+    container_name: budget-service
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: optional:file:/app/auth-secrets.properties
+      DB_USER: budget
+      DB_PASSWORD: budget
+    volumes:
+      - ./auth-secrets.properties:/app/auth-secrets.properties:ro
+
+volumes:
+  budget_pg_data:

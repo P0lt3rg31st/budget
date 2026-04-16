@@ -1,0 +1,3036 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Budget Tracker API",
+    "version": "1.0.0",
+    "description": "Backend API for expense tracking, budgeting, forecasting (ML via external engine), alerts, and scenario (what-if) simulation. Designed for mobile-first clients and extensible domain growth."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Health"
+    },
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Users"
+    },
+    {
+      "name": "Accounts"
+    },
+    {
+      "name": "Categories"
+    },
+    {
+      "name": "Transactions"
+    },
+    {
+      "name": "Aggregates"
+    },
+    {
+      "name": "Budgets"
+    },
+    {
+      "name": "Forecasts"
+    },
+    {
+      "name": "Alerts"
+    },
+    {
+      "name": "Scenarios"
+    },
+    {
+      "name": "Imports"
+    },
+    {
+      "name": "Webhooks"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "operationId": "getHealth",
+        "summary": "Health check",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "login",
+        "summary": "Login and receive JWT token",
+        "security": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token issued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokenResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/users": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "createUser",
+        "summary": "Create user profile",
+        "security": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
+      }
+    },
+    "/api/v1/users/me": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "getMe",
+        "summary": "Get current user profile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "updateMe",
+        "summary": "Update current user profile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "deleteMe",
+        "summary": "Delete current user profile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/password": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "changeMyPassword",
+        "summary": "Change current user password",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Password changed",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
+      }
+    },
+    "/api/v1/accounts": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "operationId": "listAccounts",
+        "summary": "List accounts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/from"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountListResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Accounts"
+        ],
+        "operationId": "createAccount",
+        "summary": "Create an account",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ]
+      }
+    },
+    "/api/v1/accounts/{accountId}": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "operationId": "getAccount",
+        "summary": "Get account by id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/accountId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Accounts"
+        ],
+        "operationId": "updateAccount",
+        "summary": "Update account fields",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/accountId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/categories": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "operationId": "listCategories",
+        "summary": "List categories",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/type"
+          },
+          {
+            "$ref": "#/components/parameters/from"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryListResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "operationId": "createCategory",
+        "summary": "Create category",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ]
+      }
+    },
+    "/api/v1/categories/{categoryId}": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "operationId": "getCategory",
+        "summary": "Get category by id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/categoryId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Categories"
+        ],
+        "operationId": "updateCategory",
+        "summary": "Update category fields",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/categoryId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
+      }
+    },
+    "/api/v1/transactions": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "listTransactions",
+        "summary": "List transactions with filters",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/accountIdQuery"
+          },
+          {
+            "$ref": "#/components/parameters/type"
+          },
+          {
+            "$ref": "#/components/parameters/categoryIdQuery"
+          },
+          {
+            "$ref": "#/components/parameters/occurredFrom"
+          },
+          {
+            "$ref": "#/components/parameters/occurredTo"
+          },
+          {
+            "$ref": "#/components/parameters/from"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionListResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "createTransaction",
+        "summary": "Create transaction",
+        "description": "Creates a transaction in the currency of the target account.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ]
+      }
+    },
+    "/api/v1/transactions/{transactionId}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "getTransaction",
+        "summary": "Get transaction by id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/transactionId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "updateTransaction",
+        "summary": "Update transaction fields",
+        "description": "Updates transaction fields without moving it to another account.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/transactionId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "deleteTransaction",
+        "summary": "Delete transaction",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/transactionId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/aggregates/daily": {
+      "get": {
+        "tags": [
+          "Aggregates"
+        ],
+        "operationId": "getDailyAggregates",
+        "summary": "Daily aggregates for a date range",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/dateFrom"
+          },
+          {
+            "$ref": "#/components/parameters/dateTo"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DailyAggregateListResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/budgets/plans": {
+      "get": {
+        "tags": [
+          "Budgets"
+        ],
+        "operationId": "listBudgetPlans",
+        "summary": "List budget plans",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/periodFrom"
+          },
+          {
+            "$ref": "#/components/parameters/periodTo"
+          },
+          {
+            "$ref": "#/components/parameters/from"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetPlanListResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Budgets"
+        ],
+        "operationId": "createBudgetPlan",
+        "summary": "Create budget plan for period",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BudgetPlanCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetPlanDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ]
+      }
+    },
+    "/api/v1/budgets/plans/{planId}": {
+      "get": {
+        "tags": [
+          "Budgets"
+        ],
+        "operationId": "getBudgetPlan",
+        "summary": "Get budget plan",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/planId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetPlanDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Budgets"
+        ],
+        "operationId": "updateBudgetPlan",
+        "summary": "Update budget plan fields",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/planId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BudgetPlanUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetPlanDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
+      }
+    },
+    "/api/v1/forecasts/runs": {
+      "get": {
+        "tags": [
+          "Forecasts"
+        ],
+        "operationId": "listForecastRuns",
+        "summary": "List forecast runs",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/from"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastRunListResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/forecasts/run": {
+      "post": {
+        "tags": [
+          "Forecasts"
+        ],
+        "operationId": "runForecast",
+        "summary": "Run forecast for current user",
+        "description": "Server builds time series from stored aggregates and calls external ML engine. In MVP external engine may be stubbed.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForecastRunRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted (async run)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastRunDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              },
+              "Location": {
+                "$ref": "#/components/headers/location"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/retryAfter"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ]
+      }
+    },
+    "/api/v1/forecasts/runs/{runId}": {
+      "get": {
+        "tags": [
+          "Forecasts"
+        ],
+        "operationId": "getForecastRun",
+        "summary": "Get forecast run metadata",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/runId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastRunDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/forecasts/runs/{runId}/points": {
+      "get": {
+        "tags": [
+          "Forecasts"
+        ],
+        "operationId": "getForecastPoints",
+        "summary": "Get forecast points",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/runId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastPointListResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/alerts": {
+      "get": {
+        "tags": [
+          "Alerts"
+        ],
+        "operationId": "listAlerts",
+        "summary": "List alerts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/alertStatus"
+          },
+          {
+            "$ref": "#/components/parameters/from"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertListResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/alerts/{alertId}": {
+      "patch": {
+        "tags": [
+          "Alerts"
+        ],
+        "operationId": "updateAlert",
+        "summary": "Update alert status (acknowledge/close)",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/alertId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlertUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/scenarios": {
+      "get": {
+        "tags": [
+          "Scenarios"
+        ],
+        "operationId": "listScenarios",
+        "summary": "List saved what-if scenarios",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/from"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioListResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Scenarios"
+        ],
+        "operationId": "createScenario",
+        "summary": "Create a what-if scenario (placeholder, extensible)",
+        "description": "Scenarios describe planned changes (e.g., recurring payment, % cut by category). Server may run forecast for scenario and link result to a forecast run.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScenarioCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ]
+      }
+    },
+    "/api/v1/imports": {
+      "post": {
+        "tags": [
+          "Imports"
+        ],
+        "operationId": "importTransactions",
+        "summary": "Import transactions (placeholder)",
+        "description": "Reserved for future import flows: CSV, bank exports, OSDU-like integrations.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportJobDto"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ]
+      }
+    },
+    "/api/v1/webhooks/forecast-engine": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "operationId": "webhookForecastEngine",
+        "summary": "Forecast engine callback (optional future async)",
+        "description": "Optional callback endpoint if forecast engine runs asynchronously and pushes results.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForecastEngineCallback"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "OK (no content)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/requestId"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/requestIdHeader"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "headers": {
+      "requestId": {
+        "description": "Correlation id. Server echoes it back (or generates one).",
+        "schema": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 64
+        },
+        "example": "req_7b1f2b6a2b4a4b0b"
+      },
+      "location": {
+        "description": "URL to poll async resource status.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "/api/v1/forecasts/runs/700"
+      },
+      "retryAfter": {
+        "description": "Suggested polling delay in seconds.",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "example": 2
+      }
+    },
+    "parameters": {
+      "from": {
+        "name": "from",
+        "in": "query",
+        "description": "Offset for pagination",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        }
+      },
+      "size": {
+        "name": "size",
+        "in": "query",
+        "description": "Page size for pagination",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200,
+          "default": 20
+        }
+      },
+      "requestIdHeader": {
+        "name": "X-Request-Id",
+        "in": "header",
+        "required": false,
+        "description": "Optional correlation id from client. Helps to trace logs end-to-end.",
+        "schema": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 64
+        }
+      },
+      "accountId": {
+        "name": "accountId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        }
+      },
+      "accountIdQuery": {
+        "name": "accountId",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        }
+      },
+      "categoryId": {
+        "name": "categoryId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        }
+      },
+      "categoryIdQuery": {
+        "name": "categoryId",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        }
+      },
+      "transactionId": {
+        "name": "transactionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        }
+      },
+      "planId": {
+        "name": "planId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        }
+      },
+      "runId": {
+        "name": "runId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        }
+      },
+      "alertId": {
+        "name": "alertId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        }
+      },
+      "type": {
+        "name": "type",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/FlowType"
+        }
+      },
+      "occurredFrom": {
+        "name": "occurredFrom",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "occurredTo": {
+        "name": "occurredTo",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "dateFrom": {
+        "name": "dateFrom",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "dateTo": {
+        "name": "dateTo",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "periodFrom": {
+        "name": "periodFrom",
+        "in": "query",
+        "required": false,
+        "description": "Filter plans by period start (inclusive)",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "periodTo": {
+        "name": "periodTo",
+        "in": "query",
+        "required": false,
+        "description": "Filter plans by period end (inclusive)",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "alertStatus": {
+        "name": "status",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/AlertStatus"
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        },
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/requestId"
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        },
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/requestId"
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        },
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/requestId"
+          }
+        }
+      },
+      "Conflict": {
+        "description": "Conflict",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        },
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/requestId"
+          }
+        }
+      }
+    },
+    "schemas": {
+      "HealthResponse": {
+        "type": "object",
+        "required": [
+          "status",
+          "time"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "UP"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiError": {
+        "type": "object",
+        "required": [
+          "status",
+          "error",
+          "message",
+          "path",
+          "timestamp"
+        ],
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "error": {
+            "type": "string",
+            "example": "Bad Request"
+          },
+          "message": {
+            "type": "string",
+            "example": "Validation failed: amount must be positive"
+          },
+          "path": {
+            "type": "string",
+            "example": "/api/v1/transactions"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "traceId": {
+            "type": "string",
+            "description": "Correlation id for logs/tracing",
+            "example": "7b1f2b6a2b4a4b0b"
+          }
+        }
+      },
+      "FlowType": {
+        "type": "string",
+        "description": "Expense or income",
+        "enum": [
+          "EXPENSE",
+          "INCOME"
+        ]
+      },
+      "CurrencyCode": {
+        "type": "string",
+        "description": "ISO 4217 currency code",
+        "minLength": 3,
+        "maxLength": 3,
+        "example": "EUR"
+      },
+      "UserDto": {
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "displayName",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "example": "Timofei"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "UserCreateRequest": {
+        "type": "object",
+        "required": [
+          "email",
+          "displayName",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 254
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8,
+            "maxLength": 255
+          }
+        }
+      },
+      "UserUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 254
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        }
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "required": [
+          "currentPassword",
+          "newPassword"
+        ],
+        "properties": {
+          "currentPassword": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8,
+            "maxLength": 255
+          },
+          "newPassword": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8,
+            "maxLength": 255
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        }
+      },
+      "AuthTokenResponse": {
+        "type": "object",
+        "required": [
+          "tokenType",
+          "accessToken",
+          "expiresIn"
+        ],
+        "properties": {
+          "tokenType": {
+            "type": "string",
+            "example": "Bearer"
+          },
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "expiresIn": {
+            "type": "integer",
+            "format": "int64",
+            "example": 3600
+          }
+        }
+      },
+      "AccountDto": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "currency",
+          "archived",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "name": {
+            "type": "string",
+            "example": "Main"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyCode"
+          },
+          "archived": {
+            "type": "boolean",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AccountCreateRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "currency"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyCode"
+          }
+        }
+      },
+      "AccountUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "archived": {
+            "type": "boolean"
+          }
+        }
+      },
+      "AccountListResponse": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountDto"
+            }
+          }
+        }
+      },
+      "CategoryDto": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "type",
+          "archived",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 100
+          },
+          "name": {
+            "type": "string",
+            "example": "Groceries"
+          },
+          "type": {
+            "$ref": "#/components/schemas/FlowType"
+          },
+          "archived": {
+            "type": "boolean",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CategoryCreateRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "type": {
+            "$ref": "#/components/schemas/FlowType"
+          }
+        }
+      },
+      "CategoryUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "archived": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CategoryListResponse": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CategoryDto"
+            }
+          }
+        }
+      },
+      "TransactionDto": {
+        "type": "object",
+        "required": [
+          "id",
+          "accountId",
+          "type",
+          "categoryId",
+          "occurredAt",
+          "amount",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 5000
+          },
+          "accountId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "type": {
+            "$ref": "#/components/schemas/FlowType"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 100
+          },
+          "counterpartyName": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 120,
+            "example": "K-Market"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 500,
+            "example": "Coffee"
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "amount": {
+            "type": "string",
+            "description": "Positive decimal amount in account currency.",
+            "pattern": "^(?:0\\.(?:0*[1-9]\\d{0,7})|[1-9]\\d*(?:\\.\\d{1,8})?)$",
+            "example": "12.50"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "TransactionCreateRequest": {
+        "type": "object",
+        "required": [
+          "accountId",
+          "type",
+          "categoryId",
+          "occurredAt",
+          "amount"
+        ],
+        "properties": {
+          "accountId": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          },
+          "type": {
+            "$ref": "#/components/schemas/FlowType"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          },
+          "counterpartyName": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 120
+          },
+          "note": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 500
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "amount": {
+            "type": "string",
+            "description": "Positive decimal amount in account currency.",
+            "pattern": "^(?:0\\.(?:0*[1-9]\\d{0,7})|[1-9]\\d*(?:\\.\\d{1,8})?)$",
+            "example": "12.50"
+          }
+        }
+      },
+      "TransactionUpdateRequest": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/FlowType"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          },
+          "counterpartyName": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "amount": {
+            "type": "string",
+            "description": "Positive decimal amount in account currency.",
+            "pattern": "^(?:0\\.(?:0*[1-9]\\d{0,7})|[1-9]\\d*(?:\\.\\d{1,8})?)$",
+            "example": "12.50"
+          }
+        }
+      },
+      "TransactionListResponse": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransactionDto"
+            }
+          }
+        }
+      },
+      "DailyAggregateDto": {
+        "type": "object",
+        "required": [
+          "date",
+          "expenseTotal",
+          "incomeTotal",
+          "currency"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-03-05"
+          },
+          "expenseTotal": {
+            "type": "number",
+            "format": "double",
+            "example": 42.3,
+            "minimum": 0
+          },
+          "incomeTotal": {
+            "type": "number",
+            "format": "double",
+            "example": 0,
+            "minimum": 0
+          },
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyCode"
+          },
+          "byCategory": {
+            "type": "object",
+            "description": "Optional per-category totals (future extension)",
+            "additionalProperties": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        }
+      },
+      "DailyAggregateListResponse": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DailyAggregateDto"
+            }
+          }
+        }
+      },
+      "BudgetPlanDto": {
+        "type": "object",
+        "required": [
+          "id",
+          "periodStart",
+          "periodEnd",
+          "currency",
+          "totalExpenseLimit",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 900
+          },
+          "periodStart": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-03-01"
+          },
+          "periodEnd": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-03-31"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyCode"
+          },
+          "totalExpenseLimit": {
+            "type": "number",
+            "format": "double",
+            "minimum": 0,
+            "example": 600.0
+          },
+          "categoryLimits": {
+            "type": "object",
+            "description": "Optional per-category limits (key = categoryId)",
+            "additionalProperties": {
+              "type": "number",
+              "format": "double",
+              "minimum": 0
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "BudgetPlanCreateRequest": {
+        "type": "object",
+        "required": [
+          "periodStart",
+          "periodEnd",
+          "currency",
+          "totalExpenseLimit"
+        ],
+        "properties": {
+          "periodStart": {
+            "type": "string",
+            "format": "date"
+          },
+          "periodEnd": {
+            "type": "string",
+            "format": "date"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyCode"
+          },
+          "totalExpenseLimit": {
+            "type": "number",
+            "format": "double",
+            "minimum": 0
+          },
+          "categoryLimits": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "double",
+              "minimum": 0
+            }
+          }
+        }
+      },
+      "BudgetPlanUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "totalExpenseLimit": {
+            "type": "number",
+            "format": "double",
+            "minimum": 0
+          },
+          "categoryLimits": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "double",
+              "minimum": 0
+            }
+          }
+        }
+      },
+      "BudgetPlanListResponse": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BudgetPlanDto"
+            }
+          }
+        }
+      },
+      "ForecastRunStatus": {
+        "type": "string",
+        "enum": [
+          "QUEUED",
+          "RUNNING",
+          "SUCCEEDED",
+          "FAILED"
+        ]
+      },
+      "ForecastModelType": {
+        "type": "string",
+        "description": "Expandable model type registry",
+        "enum": [
+          "STUB",
+          "PROPHET",
+          "ARIMA",
+          "ETS",
+          "LSTM",
+          "OTHER"
+        ]
+      },
+      "ForecastRunRequest": {
+        "type": "object",
+        "required": [
+          "horizonDays"
+        ],
+        "properties": {
+          "horizonDays": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 365,
+            "example": 30
+          },
+          "historyDays": {
+            "type": "integer",
+            "minimum": 30,
+            "maximum": 2000,
+            "description": "How many days of history to use",
+            "example": 365
+          },
+          "modelType": {
+            "$ref": "#/components/schemas/ForecastModelType"
+          },
+          "includeIncome": {
+            "type": "boolean",
+            "default": true
+          },
+          "confidenceLevels": {
+            "type": "array",
+            "description": "Quantiles for prediction intervals (future extension)",
+            "items": {
+              "type": "number",
+              "format": "double"
+            },
+            "example": [
+              0.5,
+              0.9
+            ]
+          }
+        }
+      },
+      "ForecastRunDto": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "modelType",
+          "horizonDays",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 700
+          },
+          "status": {
+            "$ref": "#/components/schemas/ForecastRunStatus"
+          },
+          "modelType": {
+            "$ref": "#/components/schemas/ForecastModelType"
+          },
+          "horizonDays": {
+            "type": "integer",
+            "example": 30
+          },
+          "historyDays": {
+            "type": "integer",
+            "example": 365
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "metrics": {
+            "type": "object",
+            "description": "Backtest metrics (if computed)",
+            "additionalProperties": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ForecastRunListResponse": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ForecastRunDto"
+            }
+          }
+        }
+      },
+      "ForecastPointDto": {
+        "type": "object",
+        "required": [
+          "date",
+          "currency"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyCode"
+          },
+          "expenseP50": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "expenseP90": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "incomeP50": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "incomeP90": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        }
+      },
+      "ForecastPointListResponse": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ForecastPointDto"
+            }
+          }
+        }
+      },
+      "AlertType": {
+        "type": "string",
+        "enum": [
+          "OVERSPEND_RISK",
+          "CASHFLOW_RISK",
+          "ANOMALY",
+          "OTHER"
+        ]
+      },
+      "AlertSeverity": {
+        "type": "string",
+        "enum": [
+          "INFO",
+          "WARNING",
+          "CRITICAL"
+        ]
+      },
+      "AlertStatus": {
+        "type": "string",
+        "enum": [
+          "OPEN",
+          "ACKNOWLEDGED",
+          "CLOSED"
+        ]
+      },
+      "AlertDto": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "severity",
+          "status",
+          "message",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 300
+          },
+          "type": {
+            "$ref": "#/components/schemas/AlertType"
+          },
+          "severity": {
+            "$ref": "#/components/schemas/AlertSeverity"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AlertStatus"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Optional date the alert relates to"
+          },
+          "message": {
+            "type": "string",
+            "example": "Risk of exceeding monthly budget (p90) by 12%."
+          },
+          "relatedForecastRunId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "AlertUpdateRequest": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AlertStatus"
+          }
+        }
+      },
+      "AlertListResponse": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AlertDto"
+            }
+          }
+        }
+      },
+      "ScenarioType": {
+        "type": "string",
+        "description": "Extensible scenario registry",
+        "enum": [
+          "PERCENT_BY_CATEGORY",
+          "ADD_RECURRING_PAYMENT",
+          "ONE_TIME_ADJUSTMENT",
+          "OTHER"
+        ]
+      },
+      "ScenarioDto": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "type",
+          "parameters",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 88
+          },
+          "name": {
+            "type": "string",
+            "example": "Cut coffee by 20%"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ScenarioType"
+          },
+          "parameters": {
+            "type": "object",
+            "description": "Scenario payload; shape depends on type",
+            "additionalProperties": true
+          },
+          "resultForecastRunId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ScenarioCreateRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "type",
+          "parameters"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "type": {
+            "$ref": "#/components/schemas/ScenarioType"
+          },
+          "parameters": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "runForecast": {
+            "type": "boolean",
+            "default": true,
+            "description": "If true, server runs forecast for this scenario"
+          }
+        }
+      },
+      "ScenarioListResponse": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScenarioDto"
+            }
+          }
+        }
+      },
+      "ImportRequest": {
+        "type": "object",
+        "required": [
+          "format",
+          "payload"
+        ],
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "CSV",
+              "JSON",
+              "BANK_EXPORT",
+              "OTHER"
+            ]
+          },
+          "payload": {
+            "type": "string",
+            "description": "Base64 or opaque content reference (future)"
+          },
+          "dryRun": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "ImportJobDto": {
+        "type": "object",
+        "required": [
+          "jobId",
+          "status",
+          "createdAt"
+        ],
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "example": "imp_20260305_0001"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "QUEUED",
+              "RUNNING",
+              "SUCCEEDED",
+              "FAILED"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ForecastEngineCallback": {
+        "type": "object",
+        "required": [
+          "runId",
+          "status"
+        ],
+        "properties": {
+          "runId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ForecastRunStatus"
+          },
+          "metrics": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          "points": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ForecastPointDto"
+            }
+          }
+        }
+      }
+    }
+  }
+}
