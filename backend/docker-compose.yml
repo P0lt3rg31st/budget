@@ -28,10 +28,11 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: optional:file:/app/auth-secrets.properties
       DB_USER: budget
       DB_PASSWORD: budget
-      # если захочешь — можно и URL прокинуть, но в docker-профиле он и так db:5432
-      # SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/budget
+    volumes:
+      - ./auth-secrets.properties:/app/auth-secrets.properties:ro
 
 volumes:
   budget_pg_data:

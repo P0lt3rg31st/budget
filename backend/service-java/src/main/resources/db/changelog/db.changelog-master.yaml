@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changesets/000-init-schema.sql
+  - include:
+      file: db/changelog/changesets/013-1-drop-daily-aggregates-view-before-transaction-refactor.sql
+  - include:
+      file: db/changelog/changesets/014-refactor-transactions-domain.sql
+  - include:
+      file: db/changelog/changesets/015-recreate-daily-aggregates-view-after-transaction-refactor.sql
