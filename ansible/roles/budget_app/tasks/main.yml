@@ -7,7 +7,7 @@
 - name: Create auth-secrets.properties
   copy:
     dest: "{{ app_dir }}/auth-secrets.properties"
-    mode: "0600"
+    mode: "0644"
     content: |
       budget.auth.secret={{ budget_auth_secret }}
       budget.auth.accessTokenExpiresInSeconds=3600
