@@ -171,6 +171,78 @@ Backend и frontend объединены в единый репозиторий.
 
 ---
 
+---
+
+## Запуск опубликованного Docker-образа
+
+Backend-приложение собирается в CI через GitHub Actions и публикуется как Docker-образ в GitHub Container Registry:
+
+```text
+ghcr.io/p0lt3rg31st/budget-service:latest
+```
+
+Для локального запуска можно использовать отдельный compose-файл:
+
+```text
+backend/docker-compose.registry.yml
+```
+
+Он запускает backend не из локальной сборки через `build`, а из уже опубликованного образа через `image`.
+
+### 1. Перейти в директорию backend
+
+```bash
+cd backend
+```
+
+### 2. Скачать опубликованный образ
+
+```bash
+docker pull ghcr.io/p0lt3rg31st/budget-service:latest
+```
+
+Если образ закрыт правами доступа, нужно предварительно выполнить вход в GitHub Container Registry:
+
+```bash
+docker login ghcr.io -u P0lt3rg31st
+```
+
+В качестве пароля используется не пароль от GitHub, а GitHub Personal Access Token с правом `read:packages`.
+
+### 3. Запустить приложение и базу данных
+
+```bash
+docker compose -f docker-compose.registry.yml up -d
+```
+
+### 4. Проверить, что контейнеры запущены
+
+```bash
+docker ps
+```
+
+В списке контейнеров должны быть:
+
+```text
+budget-db
+budget-service
+```
+
+Если backend-контейнер запущен и не находится в статусе `Restarting` или `Exited`, приложение поднялось корректно.
+
+### 5. Остановить окружение
+
+```bash
+docker compose -f docker-compose.registry.yml down
+```
+
+Для удаления контейнеров и volume с данными PostgreSQL:
+
+```bash
+docker compose -f docker-compose.registry.yml down -v
+```
+
+
 ## Направления дальнейшего развития
 
 Проект естественно расширяется в сторону:
