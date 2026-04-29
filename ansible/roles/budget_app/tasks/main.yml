@@ -1,0 +1,30 @@
+- name: Create application directory
+  file:
+    path: "{{ app_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Create auth-secrets.properties
+  copy:
+    dest: "{{ app_dir }}/auth-secrets.properties"
+    mode: "0600"
+    content: |
+      budget.auth.secret={{ budget_auth_secret }}
+      budget.auth.accessTokenExpiresInSeconds=3600
+      budget.auth.issuer=budget-service
+
+- name: Render Docker Compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ app_dir }}/docker-compose.yml"
+    mode: "0644"
+
+- name: Pull Docker images
+  command: docker compose pull
+  args:
+    chdir: "{{ app_dir }}"
+
+- name: Start Budget Tracker stack
+  command: docker compose up -d
+  args:
+    chdir: "{{ app_dir }}"

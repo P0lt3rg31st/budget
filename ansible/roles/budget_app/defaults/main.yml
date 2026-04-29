@@ -1,0 +1,3 @@
+app_dir: "{{ lookup('env', 'HOME') }}/budget-deploy"
+budget_image: "ghcr.io/p0lt3rg31st/budget-service:latest"
+budget_auth_secret: "change-me-change-me-change-me-change-me"

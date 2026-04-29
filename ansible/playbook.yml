@@ -1,0 +1,6 @@
+- name: Deploy Budget Tracker
+  hosts: local
+  become: false
+
+  roles:
+    - budget_app
