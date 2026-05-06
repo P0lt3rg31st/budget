@@ -92,7 +92,20 @@ Frontend расположен отдельно, что делает структ
 
 ### Frontend
 
-Frontend находится в отдельной части репозитория и подключён в общую структуру проекта.
+- **Vue 3**
+- **Quasar Framework**
+- **TypeScript**
+- **Vite**
+- **Pinia**
+- **Vue Router**
+- **TanStack Query (Vue Query)**
+- **Axios**
+- **VueUse**
+- **Chart.js / vue-chartjs**
+- **Pinia Plugin Persistedstate**
+- **PostCSS**
+- **pnpm**
+- **Electron**
 
 ---
 
